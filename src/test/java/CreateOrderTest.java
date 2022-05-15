@@ -1,60 +1,43 @@
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.junit.Before;
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
+import courier.RestAssuredClient;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import org.junit.runners.Parameterized.Parameters;
+import ru.yandex.praktikum.OrderData;
 
 @RunWith(Parameterized.class)
-public class CreateOrderTest { // ПОРАБОТАТЬ НАД ЦВЕТАМИ
-//    Проверь, что когда создаёшь заказ:
-//    можно указать один из цветов — BLACK или GREY;
-//    можно указать оба цвета;
-//    можно совсем не указывать цвет;
-//    тело ответа содержит track.
+public class CreateOrderTest extends RestAssuredClient {
+    private final String color;
+    private final int unexpected = 0;
 
-    private final String[] color;
-
-
-
-    public CreateOrderTest(String[] color) {
+    public CreateOrderTest(String color) {
         this.color = color;
     }
 
-    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2}")
+    @Parameters(
+        name = "Тестовые данные: {0} {1} {2} {3}"
+    )
+    @Step("Data for create order")
     public static Object[][] getOrderData() {
-        return new Object[][]{
-                {new String[] {"BLACK"}},
-                {new String[] {"GREY"}},
-                {new String[] {"BLACK", "GREY"}},
-                {new String[] {""}}
-
-        };
-    }
-
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        return new Object[][]{{"{\"color\":[\"BLACK\"]}"}, {"{\"color\":[\"GREY\"]}"}, {"{\"color\":[\"\"]}"}, {"{\"color\":[\"BLACK\",\"GREY\"]}"}};
     }
 
     @Test
-    public void createOrder() {
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(getOrderData())
-                        .when()
-                        .post("/api/v1/orders");
-        response.then().body(notNullValue());
-
+    @DisplayName("Create order with/without color")
+    @Description("Check for create order with/without color in body request")
+    public void createOrderTestWithParam() {
+        OrderData orderData = new OrderData();
+        orderData.orderCreate(this.color);
+        Assert.assertNotEquals(0L, (long)orderData.orderTrack());
+        orderData.getOrderData();
     }
 }
