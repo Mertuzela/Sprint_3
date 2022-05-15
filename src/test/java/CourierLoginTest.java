@@ -1,76 +1,53 @@
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.junit.Before;
+import courier.RestAssuredClient;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
-
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class CourierLoginTest {
+public class CourierLoginTest extends RestAssuredClient {
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
-    }
-//    курьер может авторизоваться;+
-//    для авторизации нужно передать все обязательные поля;+
-//    система вернёт ошибку, если неправильно указать логин или пароль;+
-//    если какого-то поля нет, запрос возвращает ошибку;
-//    если авторизоваться под несуществующим пользователем, запрос возвращает ошибку;
-//    успешный запрос возвращает id.+
-
-    @Test // Авторизация
+    @Test
+    @DisplayName("Login courier")
+    @Description("Check for login courier in system with valid data")
     public void loginCourier() {
         CourierCreate courierCreate = new CourierCreate("ninja","1234");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
+        reqSpec
                         .body(courierCreate)
                         .when()
-                        .post("/api/v1/courier/login");
-        response.then().assertThat().body("id", notNullValue())
-                .and()
-                .statusCode(200);
-    }
-
-    @Test // Авторизация пустое поле
-    public void loginCourierEmptyBody() {
-        CourierCreate courierCreate = new CourierCreate();
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
+                        .post(LOGIN_URL)
+                        .then().log().all()
+                        .assertThat().body("id", notNullValue())
                         .and()
-                        .body(courierCreate)
-                        .when()
-                        .post("/api/v1/courier/login");
-        response.then().assertThat().statusCode(400);
+                        .statusCode(200);
     }
 
-    @Test // Авторизация неверный логин
+    @Test
+    @DisplayName("Login courier with incorrect login")
+    @Description("Check for login courier in system with incorrect login")
     public void loginCourierIncorrectLogin() {
         CourierCreate courierCreate = new CourierCreate("ninj1a","1234");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
+        reqSpec
                         .body(courierCreate)
                         .when()
-                        .post("/api/v1/courier/login");
-        response.then().assertThat().statusCode(404);
+                        .post(LOGIN_URL)
+                        .then().log().all()
+                        .assertThat()
+                        .statusCode(404)
+                        .body(equalTo(login_error_404));
     }
 
-    @Test // Авторизация неверный пароль
+    @Test
+    @DisplayName("Login courier with incorrect/empty password")
+    @Description("Check for login courier in system with incorrect/empty password")
     public void loginCourierIncorrectPassword() {
-        CourierCreate courierCreate = new CourierCreate("ninja","12341234");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
+        CourierCreate courierCreate = new CourierCreate("ninja","");
+        reqSpec
                         .body(courierCreate)
                         .when()
-                        .post("/api/v1/courier/login");
-        response.then().assertThat().statusCode(404);
+                        .post(LOGIN_URL)
+                        .then().log().all()
+                        .assertThat().statusCode(400)
+                        .body(equalTo(login_error_400));
     }
 }
