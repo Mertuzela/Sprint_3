@@ -2,10 +2,10 @@ package ru.yandex.praktikum;
 
 import java.util.ArrayList;
 
+
 public class ResponseJSON {
-    private ArrayList<String[]> orders;
+     private String courierId;
     private int id;
-    private String courierId;
     private String firstName;
     private String lastName;
     private String address;
@@ -20,19 +20,18 @@ public class ResponseJSON {
     private String updatedAt;
     private int status;
 
-    public ResponseJSON() {
-    }
-
     public ArrayList<String[]> getOrders() {
-        return this.orders;
+        return orders;
     }
 
     public void setOrders(ArrayList<String[]> orders) {
         this.orders = orders;
     }
 
+    private ArrayList<String[]>orders;
+
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
@@ -40,7 +39,7 @@ public class ResponseJSON {
     }
 
     public String getCourierId() {
-        return this.courierId;
+        return courierId;
     }
 
     public void setCourierId(String courierId) {
@@ -48,7 +47,7 @@ public class ResponseJSON {
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -56,7 +55,7 @@ public class ResponseJSON {
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -64,7 +63,7 @@ public class ResponseJSON {
     }
 
     public String getAddress() {
-        return this.address;
+        return address;
     }
 
     public void setAddress(String address) {
@@ -72,7 +71,7 @@ public class ResponseJSON {
     }
 
     public String getMetroStation() {
-        return this.metroStation;
+        return metroStation;
     }
 
     public void setMetroStation(String metroStation) {
@@ -80,7 +79,7 @@ public class ResponseJSON {
     }
 
     public String getPhone() {
-        return this.phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
@@ -88,7 +87,7 @@ public class ResponseJSON {
     }
 
     public String getRentTime() {
-        return this.rentTime;
+        return rentTime;
     }
 
     public void setRentTime(String rentTime) {
@@ -96,7 +95,7 @@ public class ResponseJSON {
     }
 
     public String getDeliveryDate() {
-        return this.deliveryDate;
+        return deliveryDate;
     }
 
     public void setDeliveryDate(String deliveryDate) {
@@ -104,7 +103,7 @@ public class ResponseJSON {
     }
 
     public int getTrack() {
-        return this.track;
+        return track;
     }
 
     public void setTrack(int track) {
@@ -112,7 +111,7 @@ public class ResponseJSON {
     }
 
     public String getColor() {
-        return this.color;
+        return color;
     }
 
     public void setColor(String color) {
@@ -120,7 +119,7 @@ public class ResponseJSON {
     }
 
     public String getComment() {
-        return this.comment;
+        return comment;
     }
 
     public void setComment(String comment) {
@@ -128,7 +127,7 @@ public class ResponseJSON {
     }
 
     public String getCreatedAt() {
-        return this.createdAt;
+        return createdAt;
     }
 
     public void setCreatedAt(String createdAt) {
@@ -136,7 +135,7 @@ public class ResponseJSON {
     }
 
     public String getUpdatedAt() {
-        return this.updatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(String updatedAt) {
@@ -144,10 +143,10 @@ public class ResponseJSON {
     }
 
     public int getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
-    }
+    }  
 }
