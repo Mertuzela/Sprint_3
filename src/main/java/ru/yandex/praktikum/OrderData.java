@@ -20,6 +20,11 @@ public class OrderData extends RestAssuredClient {
     }
 
     public void getOrderData() {
-        ((ValidatableResponse)((ValidatableResponse)((ValidatableResponse)((Response)this.reqSpec.when().get("/orders/track?t=" + this.track, new Object[0])).then()).log().all()).assertThat()).statusCode(200);
+        .reqSpec
+            .when()
+            .get("/orders/track?t=" + track)
+            .then()).log().all())
+            .assertThat())
+            .statusCode(200);
     }
 }
