@@ -1,30 +1,32 @@
 package ru.yandex.praktikum;
 
 import courier.RestAssuredClient;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 
 public class OrderData extends RestAssuredClient {
     private int track;
 
-    public OrderData() {
-    }
-
     public int orderCreate(String color) {
-        this.track = (Integer)((ValidatableResponse)((ValidatableResponse)((ValidatableResponse)((ValidatableResponse)((Response)this.reqSpec.body(color).when().post("/orders", new Object[0])).then()).log().all()).assertThat()).statusCode(201)).extract().path("track", new String[0]);
-        return this.track;
+       track = reqSpec
+                .body(color)
+                .when()
+                .post(ORDERS_URL)
+                .then().log().all()
+                .assertThat()
+                .statusCode(201)
+                .extract()
+                .path("track");
+        return track;
     }
 
-    public int orderTrack() {
-        return this.track;
+    public int orderTrack(){
+        return track;
     }
-
     public void getOrderData() {
-        .reqSpec
-            .when()
-            .get("/orders/track?t=" + track)
-            .then()).log().all())
-            .assertThat())
-            .statusCode(200);
+       reqSpec
+                .when()
+                .get(ORDER_DATA+track)
+                .then().log().all()
+                .assertThat()
+                .statusCode(200);
     }
 }
