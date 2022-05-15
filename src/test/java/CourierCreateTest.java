@@ -37,17 +37,4 @@ public class CourierCreateTest {
                         .and()
                         .body(equalTo("{\"code\":400,\"message\":\"Недостаточно данных для создания учетной записи\"}"));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
