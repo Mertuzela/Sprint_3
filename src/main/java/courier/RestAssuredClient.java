@@ -11,7 +11,6 @@ public class RestAssuredClient {
     protected final String LOGIN_URL = REGISTRATION + "/login";
     protected final String ORDERS_URL = "/orders";
     protected final String COURIER = REGISTRATION + "/{courierId}";
-    protected final String ORDER_DATA = ORDERS_URL + "/track?t=";
 
     protected final String login_error_404 = "{\"code\":404,\"message\":\"Учетная запись не найдена\"}";
     protected final String login_error_400 = "{\"code\":400,\"message\":\"Недостаточно данных для входа\"}";

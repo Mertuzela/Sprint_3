@@ -1,0 +1,7 @@
+courier\CourierClient.class
+courier\CourierCredentials.class
+ru\yandex\praktikum\FullResponse.class
+courier\Courier.class
+ru\yandex\praktikum\OrderData.class
+courier\RestAssuredClient.class
+ru\yandex\praktikum\ResponseJSON.class

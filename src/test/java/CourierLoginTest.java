@@ -1,53 +1,76 @@
+import courier.Courier;
+import courier.CourierClient;
+import courier.CourierCredentials;
 import courier.RestAssuredClient;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class CourierLoginTest extends RestAssuredClient {
+
+    private CourierClient courierClient;
+    private Courier courier;
+
+    @Before
+    public void setUp() {
+        courierClient = new CourierClient();
+        courier = Courier.getRandom();
+
+    }
 
     @Test
     @DisplayName("Login courier")
     @Description("Check for login courier in system with valid data")
-    public void loginCourier() {
-        CourierCreate courierCreate = new CourierCreate("ninja","1234");
-        reqSpec
-                        .body(courierCreate)
-                        .when()
-                        .post(LOGIN_URL)
-                        .then().log().all()
-                        .assertThat().body("id", notNullValue())
-                        .and()
-                        .statusCode(200);
+    public void loginCourierInSystemWithValidData() {
+        courierClient.createCourier(courier);
+        CourierCredentials credentials = CourierCredentials.from(courier);
+        int courierId = courierClient.loginCourier(credentials)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("id");
+        courierClient.deleteCourier(courierId);
     }
 
     @Test
     @DisplayName("Login courier with incorrect login")
     @Description("Check for login courier in system with incorrect login")
-    public void loginCourierIncorrectLogin() {
-        CourierCreate courierCreate = new CourierCreate("ninj1a","1234");
-        reqSpec
-                        .body(courierCreate)
-                        .when()
-                        .post(LOGIN_URL)
-                        .then().log().all()
-                        .assertThat()
-                        .statusCode(404)
-                        .body(equalTo(login_error_404));
+    public void loginCourierWithIncorrectLogin() {
+        Courier courier = new Courier("","1234","");
+        CourierCredentials credentials = CourierCredentials.from(courier);
+        courierClient.loginCourier(credentials)
+                .assertThat()
+                .statusCode(SC_BAD_REQUEST)
+                .and()
+                .body(equalTo(login_error_400));
+    }
+    @Test
+    @DisplayName("Login courier with empty password")
+    @Description("Check for login courier in system with empty password")
+    public void loginCourierWithIncorrectPassword() {
+        Courier courier = new Courier("ninja","","");
+        CourierCredentials credentials = CourierCredentials.from(courier);
+        courierClient.loginCourier(credentials)
+                .assertThat()
+                .statusCode(SC_BAD_REQUEST)
+                .and()
+                .body(equalTo(login_error_400));
     }
 
     @Test
-    @DisplayName("Login courier with incorrect/empty password")
-    @Description("Check for login courier in system with incorrect/empty password")
-    public void loginCourierIncorrectPassword() {
-        CourierCreate courierCreate = new CourierCreate("ninja","");
-        reqSpec
-                        .body(courierCreate)
-                        .when()
-                        .post(LOGIN_URL)
-                        .then().log().all()
-                        .assertThat().statusCode(400)
-                        .body(equalTo(login_error_400));
+    @DisplayName("Login courier with invalid data")
+    @Description("Check for login courier in system with incorrect password")
+    public void loginCourierWithInvalidData() {
+        Courier courier = new Courier("ninja","0","");
+        CourierCredentials credentials = CourierCredentials.from(courier);
+        courierClient.loginCourier(credentials)
+                .assertThat()
+                .statusCode(SC_NOT_FOUND)
+                .and()
+                .body(equalTo(login_error_404));
     }
 }
